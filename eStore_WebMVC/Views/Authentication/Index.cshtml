@@ -1,0 +1,29 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using eStore_WebMVC.Models
+@model Authentication
+
+<div class="row">
+    <div class="col-6 align-content-center">
+        <h1 style="color:blue;text-align:center">eStore Management</h1>
+        <form asp-action="Authentication" asp-controller="Authentication" method="post">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+            <div class="form-outline mb-4 w-60">
+                <input type="email" id="email" asp-for="Email" class="form-control" placeholder="Email" required />
+            </div>
+
+            <div class="form-outline mb-4 w-60">
+                <input type="password" id="password" asp-for="Password" class="form-control" placeholder="Password" required />
+            </div>
+
+            <div class="row mb-4">
+                <div class="col d-flex justify-content-center">
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-block mb-4">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

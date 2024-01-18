@@ -1,0 +1,43 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using eStore_WebMVC.Models
+@model Member
+
+<h1>Create New Member</h1>
+<form asp-action="CreateMember" asp-controller="Member" method="post">
+    <div class="form-group row mt-3">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-5">
+            <input type="email" class="form-control" asp-for="Email" id="email" placeholder="Email" required>
+        </div>
+    </div>
+    <div class="form-group row mt-3">
+        <label for="password" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-5">
+            <input type="password" class="form-control" asp-for="Password" id="password" placeholder="Password" required>
+        </div>
+    </div>
+    <div class="form-group row mt-3">
+        <label for="companyname" class="col-sm-2 col-form-label">ConpanyName</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" asp-for="CompanyName" id="companyname" placeholder="CompanyName" required>
+        </div>
+    </div>
+  
+    <div class="form-group row mt-3">
+        <label for="city" class="col-sm-2 col-form-label">City</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" asp-for="City" id="city" placeholder="City" required>
+        </div>
+    </div>
+    <div class="form-group row mt-3">
+        <label for="country" class="col-sm-2 col-form-label">Country</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" asp-for="Country" id="country" placeholder="Country" required>
+        </div>
+    </div>
+    <div class="form-group row mt-3">
+        <div class="col-sm-5 offset-sm-2">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

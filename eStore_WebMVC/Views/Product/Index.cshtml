@@ -1,0 +1,124 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using eStore_WebMVC.Models
+@model List<Product>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eStore_WebMVC</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="Index">Member</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Sales" asp-action="Index">Report statistics sales</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<h1>Product Management</h1>
+
+<a class="add" asp-action="Add" asp-controller="Product">Create</a>
+<table border="1">
+    <tr>
+        <th>
+            ProductID
+        </th>
+        <th>
+            ProductName
+            <div>
+                <form action="/Product/Index" method="get">
+                    <input class="search" type="search" name="productName" value="@ViewBag.productName" placeholder="search" />
+                </form>
+
+            </div>
+        </th>
+        <th>
+            Weight
+        </th>
+        <th>Category</th>
+        <th>
+            UnitPrice
+            <div>
+                <form action="/Product/Index" method="get">
+                    <input class="search" type="search" name="price" value="@ViewBag.price" placeholder="search" />
+                </form>
+
+            </div>
+        </th>
+        <th>
+            UnitsInStock
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+    @foreach (Product product in Model)
+    {
+        <tr>
+
+            <td>@product.ProductId</td>
+            <td>@product.ProductName</td>
+            <td>@product.Weight</td>
+            <td>@product.Category.CategoryName</td>
+            <td>@product.UnitPrice</td>
+            <td>@product.UnitsInStock</td>
+            <td>
+                <a asp-action="Update" asp-controller="Product" asp-route-id="@product.ProductId">Edit</a>
+                <a asp-action="DeleteAsyn" asp-controller="Product" asp-route-id="@product.ProductId">Delete</a>
+            </td>
+        </tr>
+    }
+
+
+
+</table>
+<style>
+    table {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 100%
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2
+    }
+
+    th {
+        background-color: #04AA6D;
+        color: black;
+    }
+
+    .add {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: blue;
+        color: white;
+        text-decoration: none;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+
+    .search {
+        padding: 5px;
+        border-radius: 5px;
+    }
+</style>
