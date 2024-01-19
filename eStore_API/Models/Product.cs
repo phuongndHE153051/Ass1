@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace eStore_API.Models
+namespace eStore_API.Modelss
 {
     public partial class Product
     {
@@ -11,12 +11,13 @@ namespace eStore_API.Models
         }
 
         public int ProductId { get; set; }
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public string ProductName { get; set; } = null!;
-        public decimal? Weight { get; set; }
-        public decimal? UnitPrice { get; set; }
-        public int? UnitsInStock { get; set; }
-        public virtual Category? Category { get; set; }
+        public float? Weight { get; set; }
+        public int UnitPrice { get; set; }
+        public int UnitInStock { get; set; }
+
+        public virtual Category Category { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

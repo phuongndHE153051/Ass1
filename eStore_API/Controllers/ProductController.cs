@@ -1,4 +1,5 @@
 ﻿using eStore_API.Models;
+using eStore_API.Modelss;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -127,7 +128,7 @@ namespace eStore_API.Controllers
                     }
                     product.ProductName = p.ProductName;
                     product.UnitPrice = p.UnitPrice;
-                    product.UnitsInStock = p.UnitsInStock;
+                    product.UnitInStock = p.UnitInStock;
                     product.CategoryId = p.CategoryId;
                    
                     context.Products.Update(product);

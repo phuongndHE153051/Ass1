@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace eStore_API.Models
+namespace eStore_API.Modelss
 {
     public partial class Assignment01_PRN231Context : DbContext
     {
@@ -24,11 +24,11 @@ namespace eStore_API.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var builder = new ConfigurationBuilder()
-                 .SetBasePath(Directory.GetCurrentDirectory())
-                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            IConfigurationRoot configuration = builder.Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("eStoreDB"));
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=localhost;uid=sa;pwd=Nghiaanh01@;Database=eStore");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,80 +37,59 @@ namespace eStore_API.Models
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.CategoryName).HasMaxLength(255);
+                entity.Property(e => e.CategoryName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Member>(entity =>
             {
-                entity.ToTable("Member");
+                entity.Property(e => e.City).HasMaxLength(20);
 
-                entity.Property(e => e.City).HasMaxLength(255);
+                entity.Property(e => e.CompanyName).HasMaxLength(50);
 
-                entity.Property(e => e.CompanyName).HasMaxLength(255);
+                entity.Property(e => e.Country).HasMaxLength(30);
 
-                entity.Property(e => e.Country).HasMaxLength(255);
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("EMail");
 
-                entity.Property(e => e.Email).HasMaxLength(255);
-
-                entity.Property(e => e.Password).HasMaxLength(255);
+                entity.Property(e => e.Password).HasMaxLength(20);
             });
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.ToTable("Order");
+                entity.Property(e => e.OrderDate).HasColumnType("date");
 
-                entity.Property(e => e.Freight).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.RequiredDate).HasColumnType("date");
 
-                entity.Property(e => e.OrderDate).HasColumnType("datetime");
-
-                entity.Property(e => e.RequiredDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ShippedDate).HasColumnType("datetime");
+                entity.Property(e => e.ShippedDate).HasColumnType("date");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__Order__MemberId__21B6055D");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Members");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasKey(e => new { e.OrderId, e.ProductId })
-                    .HasName("PK__OrderDet__08D097A394D46CF9");
-
-                entity.ToTable("OrderDetail");
-
-                entity.Property(e => e.Discount).HasColumnType("decimal(5, 2)");
-
-                entity.Property(e => e.UnitPrice).HasColumnType("money");
-
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderDeta__Order__24927208");
+                    .HasForeignKey(d => d.OrderId);
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderDeta__Produ__25869641");
+                    .HasForeignKey(d => d.ProductId);
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.ToTable("Product");
-
-                entity.Property(e => e.ProductName).HasMaxLength(255);
-
-                entity.Property(e => e.UnitPrice).HasColumnType("money");
-
-                entity.Property(e => e.Weight).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.ProductName).HasMaxLength(50);
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Product__Categor__1273C1CD");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Category");
             });
 
             OnModelCreatingPartial(modelBuilder);
