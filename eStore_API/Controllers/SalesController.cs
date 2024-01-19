@@ -1,4 +1,5 @@
 ﻿using eStore_API.Models;
+using eStore_API.Modelss;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,8 +27,8 @@ namespace eStore_API.Controllers
                         {
                             ProductId = group.Key.ProductId,
                             ProductName = group.Key.ProductName,
-                            TotalQuantity = group.Sum(od => od.Quantity ?? 0),
-                            TotalSales = group.Sum(od => (od.UnitPrice ?? 0) * (od.Quantity ?? 0) * (1 - (od.Discount ?? 0)))
+                            TotalQuantity = group.Sum(od => od.Quantity),
+                            TotalSales = group.Sum(od => od.UnitPrice * od.Quantity * (1 - od.Discount))
                         })
                         .OrderByDescending(result => result.TotalSales).ToList();
                     return Ok(sales);
