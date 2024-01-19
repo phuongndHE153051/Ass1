@@ -1,4 +1,6 @@
 using eStore_API.Models;
+using eStore_API.Modelss;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 
@@ -14,17 +16,15 @@ namespace eStore_API
 
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
-            var configuration = new ConfigurationBuilder()
-            .SetBasePath(builder.Environment.ContentRootPath)
-            .AddJsonFile("appsettings.json")
-            .Build();
-            var AuthenSettings = configuration.GetSection("AuthenticationSettings").Get<Authentication>();
-            builder.Services.AddSingleton(AuthenSettings);
+            builder.Services.Configure<Authentication>(builder.Configuration.GetSection("AuthenticationSettings"));
+            builder.Services.AddDbContext<Assignment01_PRN231Context>(option =>
+            {
+                option.UseSqlServer(builder.Configuration.GetConnectionString("eStoreDB"));
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
+
 
 
             var app = builder.Build();
