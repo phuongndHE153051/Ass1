@@ -13,12 +13,18 @@ namespace eStore_WebMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Statistics(DateTime startDate, DateTime endDate)
         {
-            
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
+
             string salesUri = "http://localhost:5220/api/Sales";
-            List<Salescs> sales = new List<Salescs> ();
+            List<Salescs> sales = new List<Salescs>();
             using (HttpClient client = new HttpClient())
             {
-                using (HttpResponseMessage res = await client.GetAsync(salesUri+"?startDate=" + startDate + "&endDate="+endDate))
+                using (HttpResponseMessage res = await client.GetAsync(salesUri + "?startDate=" + startDate + "&endDate=" + endDate))
                 {
                     using (HttpContent content = res.Content)
                     {

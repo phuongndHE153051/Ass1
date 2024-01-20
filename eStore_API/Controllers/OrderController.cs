@@ -11,21 +11,21 @@ namespace eStore_API.Controllers
     public class OrderController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(string? memberEmail)
         {
             try
             {
                 using (var context = new Assignment01_PRN231Context())
                 {
-                    var data = context.Orders.Include(o => o.Member).ToList();
-                    if(data == null)
+                    var data = context.Orders.Include(o => o.Member).AsQueryable();
+                    if (!string.IsNullOrEmpty(memberEmail))
                     {
-                        return NotFound();
+                        data = data.Where(o => o.Member.Email == memberEmail);
                     }
-                    return Ok(data);
+                    return Ok(data.ToList());
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -53,13 +53,22 @@ namespace eStore_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Order o)
+        public IActionResult Post(CreateOrderDto o)
         {
             try
             {
                 using (var context = new Assignment01_PRN231Context())
                 {
-                    context.Orders.Add(o);
+                    Order order = new Order()
+                    {
+                        Freight = o.Freight,
+                        MemberId = o.MemberId,
+                        OrderDate = o.OrderDate,
+                        RequiredDate = o.RequiredDate,
+                        ShippedDate = o.ShippedDate
+                    };
+
+                    context.Orders.Add(order);
                     context.SaveChanges();
                     return Ok();
                 }
@@ -71,22 +80,22 @@ namespace eStore_API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(int id, Order o)
+        public IActionResult Put(int id, CreateOrderDto o)
         {
             try
             {
                 using (var context = new Assignment01_PRN231Context())
                 {
-                    var data = context.Orders.FirstOrDefault(o => o.OrderId== id);
-                    if(data == null)
+                    var data = context.Orders.FirstOrDefault(o => o.OrderId == id);
+                    if (data == null)
                     {
                         return NotFound();
                     }
                     data.MemberId = o.MemberId;
                     data.OrderDate = o.OrderDate;
                     data.RequiredDate = o.RequiredDate;
-                    data.ShippedDate= o.ShippedDate;
-                    data.Freight= o.Freight;
+                    data.ShippedDate = o.ShippedDate;
+                    data.Freight = o.Freight;
 
                     context.Orders.Update(data);
                     context.SaveChanges();
@@ -100,7 +109,8 @@ namespace eStore_API.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id) {
+        public IActionResult Delete(int id)
+        {
             try
             {
                 using (var context = new Assignment01_PRN231Context())

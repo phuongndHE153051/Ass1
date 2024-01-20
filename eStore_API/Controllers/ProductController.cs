@@ -25,7 +25,7 @@ namespace eStore_API.Controllers
                     }
                     return Ok(data);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace eStore_API.Controllers
             {
                 using (var context = new Assignment01_PRN231Context())
                 {
-                    var data = context.Products.Include(p => p.Category).FirstOrDefault(p=>p.ProductId == id);
+                    var data = context.Products.Include(p => p.Category).FirstOrDefault(p => p.ProductId == id);
                     if (data == null)
                     {
                         return NotFound();
@@ -55,7 +55,8 @@ namespace eStore_API.Controllers
         }
 
         [HttpGet("productName")]
-        public IActionResult Get(string productName) {
+        public IActionResult Get(string productName)
+        {
             try
             {
                 using (var context = new Assignment01_PRN231Context())
@@ -75,7 +76,8 @@ namespace eStore_API.Controllers
             }
         }
         [HttpGet("price")]
-        public IActionResult Get(decimal price) {
+        public IActionResult Get(decimal price)
+        {
             try
             {
                 using (var context = new Assignment01_PRN231Context())
@@ -97,25 +99,34 @@ namespace eStore_API.Controllers
 
 
         [HttpPost]
-        public IActionResult Post(Product p)
+        public IActionResult Post(CreateProductDto createProductDto)
         {
             try
             {
                 using (var context = new Assignment01_PRN231Context())
                 {
+                    Product p = new Product()
+                    {
+                        CategoryId = createProductDto.CategoryId,
+                        ProductId = createProductDto.ProductId,
+                        ProductName = createProductDto.ProductName,
+                        UnitInStock = createProductDto.UnitInStock,
+                        UnitPrice = createProductDto.UnitPrice,
+                        Weight = createProductDto.Weight
+                    };
                     context.Products.Add(p);
                     context.SaveChanges();
                 }
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
             }
         }
 
         [HttpPut]
-        public IActionResult Put(int id,Product p)
+        public IActionResult Put(int id, CreateProductDto p)
         {
             try
             {
@@ -130,7 +141,7 @@ namespace eStore_API.Controllers
                     product.UnitPrice = p.UnitPrice;
                     product.UnitInStock = p.UnitInStock;
                     product.CategoryId = p.CategoryId;
-                   
+
                     context.Products.Update(product);
                     context.SaveChanges();
                 }

@@ -8,12 +8,20 @@ namespace eStore_WebMVC.Controllers
     {
         public IActionResult Index()
         {
+            Logout();
             return View();
         }
-
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            var session = this.HttpContext.Session;
+            session.Remove("user");
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         public async Task<IActionResult> Authentication(Authentication auth)
         {
+            var session = this.HttpContext.Session;
             string authUri = "http://localhost:5220/api/Authentication";
             using (HttpClient client = new HttpClient())
             {
@@ -23,9 +31,10 @@ namespace eStore_WebMVC.Controllers
                     {
                         if (res.IsSuccessStatusCode)
                         {
-                            return RedirectToAction("Index", "Product");
+                            session.SetString("user", auth.Email);
+                            return RedirectToAction("Index", "Home");
                         }
-                        else if(res.StatusCode == HttpStatusCode.Unauthorized)
+                        else if (res.StatusCode == HttpStatusCode.Unauthorized)
                         {
                             return RedirectToAction("Index", "Authentication");
                         }
@@ -33,7 +42,7 @@ namespace eStore_WebMVC.Controllers
                         {
                             return View("ErrorView");
                         }
-                        
+
 
                     }
                 }
