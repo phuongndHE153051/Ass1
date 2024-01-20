@@ -10,6 +10,12 @@ namespace eStore_WebMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string? productName, decimal price)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+ if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string productUri = "http://localhost:5220/api/Product";
             string categoryUri = "http://localhost:5220/api/Category";
             List<Product> products = new List<Product>();
@@ -52,7 +58,7 @@ namespace eStore_WebMVC.Controllers
                         {
                             string data = content.ReadAsStringAsync().Result;
                             products = JsonConvert.DeserializeObject<List<Product>>(data);
-                            
+
                         }
                     }
                 }
@@ -67,7 +73,7 @@ namespace eStore_WebMVC.Controllers
                         {
                             string data = content.ReadAsStringAsync().Result;
                             products = JsonConvert.DeserializeObject<List<Product>>(data);
-                            
+
                         }
                     }
                 }
@@ -78,6 +84,12 @@ namespace eStore_WebMVC.Controllers
         }
         public async Task<IActionResult> Add()
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string categoryUri = "http://localhost:5220/api/Category";
             List<Category> categories = new List<Category>();
             using (HttpClient client = new HttpClient())
@@ -97,8 +109,14 @@ namespace eStore_WebMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(CreateProductDto product)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+           if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string productUri = "http://localhost:5220/api/Product";
             string message = "";
             using (HttpClient client = new HttpClient())
@@ -111,8 +129,9 @@ namespace eStore_WebMVC.Controllers
                     }
                     else
                     {
+                        string content = await res.Content.ReadAsStringAsync();
                         message = "Add fail!";
-                        
+
                     }
                     return RedirectToAction("Index");
                 }
@@ -121,6 +140,12 @@ namespace eStore_WebMVC.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             Product product = new Product();
             string productUri = "http://localhost:5220/api/Product";
             string categoryUri = "http://localhost:5220/api/Category";
@@ -159,6 +184,12 @@ namespace eStore_WebMVC.Controllers
 
         public async Task<IActionResult> UpdateProduct(Product product)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+           if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string productUri = "http://localhost:5220/api/Product";
             string message = "";
             using (HttpClient client = new HttpClient())
@@ -183,6 +214,12 @@ namespace eStore_WebMVC.Controllers
 
         public async Task<IActionResult> DeleteAsyn(int id)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string productUri = "http://localhost:5220/api/Product";
             string message = "";
             using (HttpClient client = new HttpClient())

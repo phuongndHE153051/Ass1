@@ -1,34 +1,6 @@
 ﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
 @using eStore_WebMVC.Models
 @model List<Order>
-
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eStore_WebMVC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Member" asp-action="Index">Member</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Sales" asp-action="Index">Report statistics sales</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
 <h1>Order Management</h1>
 
 <a class="add" asp-action="Add" asp-controller="Order">Create</a>
@@ -61,9 +33,9 @@
 
             <td>@order.OrderId</td>
             <td>@order.Member.Email</td>
-            <td>@(order.OrderDate != null ? order.OrderDate.Value.ToString("dd/MM/yyyy") : "")</td>
-            <td>@(order.RequiredDate != null ? order.RequiredDate.Value.ToString("dd/MM/yyyy") : "")</td>
-            <td>@(order.ShippedDate != null ? order.ShippedDate.Value.ToString("dd/MM/yyyy") : "")</td>
+            <td>@(order.OrderDate.ToString("dd/MM/yyyy"))</td>
+            <td>@(order.RequiredDate?.ToString("dd/MM/yyyy"))</td>
+            <td>@(order.ShippedDate.ToString("dd/MM/yyyy"))</td>
             <td>@order.Freight</td>
             <td>
                 <a asp-action="Update" asp-controller="Order" asp-route-id="@order.OrderId">Edit</a>

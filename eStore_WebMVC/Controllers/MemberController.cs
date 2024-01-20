@@ -6,9 +6,16 @@ namespace eStore_WebMVC.Controllers
 {
     public class MemberController : Controller
     {
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string memberUri = "http://localhost:5220/api/Member";
             List<Member> members = new List<Member>();
             using (HttpClient client = new HttpClient())
@@ -27,11 +34,23 @@ namespace eStore_WebMVC.Controllers
         }
         public async Task<IActionResult> Add()
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> CreateMember(Member member)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string memberUri = "http://localhost:5220/api/Member";
             string message = "";
             using (HttpClient client = new HttpClient())
@@ -53,6 +72,12 @@ namespace eStore_WebMVC.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             Member member = new Member();
             string memberUri = "http://localhost:5220/api/Member";
             using (HttpClient client = new HttpClient())
@@ -74,6 +99,12 @@ namespace eStore_WebMVC.Controllers
 
         public async Task<IActionResult> UpdateMember(Member member)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string memberUri = "http://localhost:5220/api/Member";
             string message = "";
             using (HttpClient client = new HttpClient())
@@ -98,6 +129,12 @@ namespace eStore_WebMVC.Controllers
 
         public async Task<IActionResult> DeleteAsyn(int id)
         {
+            var session = this.HttpContext.Session;
+            var user = session.GetString("user");
+            if (string.IsNullOrEmpty(user) || user != "admin@estore.com")
+            {
+                return RedirectToAction("Index", "Authentication");
+            }
             string memberUri = "http://localhost:5220/api/Member";
             string message = "";
             using (HttpClient client = new HttpClient())
@@ -133,5 +170,5 @@ namespace eStore_WebMVC.Controllers
         }
     }
 
-    
+
 }

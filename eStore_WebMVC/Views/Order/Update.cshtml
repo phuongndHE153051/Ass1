@@ -7,26 +7,33 @@
     <div class="form-group row mt-3">
         <label for="orderId" class="col-sm-2 col-form-label">OrderID</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" asp-for="OrderId" id="orderId" placeholder="MemberId" readonly value="@Model.OrderId" required>
+            <input type="text" class="form-control" asp-for="OrderId" id="orderId" placeholder="MemberId" readonly
+                value="@Model.OrderId" required>
         </div>
     </div>
     <div class="form-group row mt-3">
         <label for="member" class="col-sm-2 col-form-label">Member</label>
         <div class="col-sm-5">
             <select name="memberId" required>
-                <option value=null>----All-----</option>
+
                 @foreach (var item in (List<Member>)ViewBag.members)
                 {
-                    if (item.MemberId == ViewBag.memberId)
+                    @if (this.Context.Session.GetString("user") != "admin@estore.com")
                     {
-                        <option value="@item.MemberId" selected>@item.Email</option>
+                        if (item.Email == this.Context.Session.GetString("user"))
+                        {
+                            <option value="@item.MemberId" selected>@item.Email</option>
+                        }
                     }
                     else
                     {
                         <option value="@item.MemberId">@item.Email</option>
                     }
                 }
+
+
             </select>
+
         </div>
 
     </div>
@@ -34,7 +41,7 @@
         <label for="orderDate" class="col-sm-2 col-form-label">OrderDate</label>
         <div class="col-sm-5">
             @{
-                string orderDate = Model.OrderDate.HasValue ? Model.OrderDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+                string orderDate = Model.OrderDate.ToString("yyyy-MM-dd");
             }
             <input type="date" class="form-control" asp-for="OrderDate" id="orderDate" value="@orderDate" required>
         </div>
@@ -44,18 +51,21 @@
         <label for="requiredDate" class="col-sm-2 col-form-label">RequiredDate</label>
         <div class="col-sm-5">
             @{
-                string requiredDate = Model.RequiredDate.HasValue ? Model.RequiredDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+                string requiredDate = Model.RequiredDate.HasValue ? Model.RequiredDate.Value.ToString("yyyy-MM-dd") :
+                string.Empty;
             }
-            <input type="date" class="form-control" asp-for="RequiredDate" id="requireDate" value="@requiredDate" required>
+            <input type="date" class="form-control" asp-for="RequiredDate" id="requireDate" value="@requiredDate"
+                required>
         </div>
     </div>
     <div class="form-group row mt-3">
         <label for="shippedDate" class="col-sm-2 col-form-label">ShippedDate</label>
         <div class="col-sm-5">
             @{
-                string shippedDate = Model.ShippedDate.HasValue ? Model.ShippedDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+                string shippedDate = Model.ShippedDate.ToString("yyyy-MM-dd");
             }
-            <input type="date" class="form-control" asp-for="ShippedDate" id="shippedDate" value="@shippedDate" required>
+            <input type="date" class="form-control" asp-for="ShippedDate" id="shippedDate" value="@shippedDate"
+                required>
         </div>
     </div>
 

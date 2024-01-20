@@ -1,26 +1,36 @@
 ﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
 @using eStore_WebMVC.Models
-@model Order
+@model CreateOrderDto
 
 <h1>Create New Order</h1>
 <form asp-action="CreateOrder" asp-controller="Order" method="post">
+
     <div class="form-group row mt-3">
         <label for="member" class="col-sm-2 col-form-label">Member</label>
         <div class="col-sm-5">
+
             <select name="memberId" required>
-                <option value=null>----All-----</option>
+
                 @foreach (var item in (List<Member>)ViewBag.members)
                 {
-                    if (item.MemberId == ViewBag.memberId)
+                    @if (this.Context.Session.GetString("user") != "admin@estore.com")
                     {
-                                <option value="@item.MemberId" selected>@item.Email</option>
+                        if (item.Email == this.Context.Session.GetString("user"))
+                        {
+                            <option value="@item.MemberId" selected>@item.Email</option>
+                        }
                     }
                     else
                     {
                         <option value="@item.MemberId">@item.Email</option>
                     }
                 }
+
+
             </select>
+
+
+
         </div>
 
     </div>
