@@ -13,6 +13,12 @@ namespace eStore_API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("eStoreDB");
+            builder.Services.AddDbContext<Assignment01_PRN231Context>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
 
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);

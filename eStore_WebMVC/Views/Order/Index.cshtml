@@ -38,7 +38,7 @@
             <td>@(order.ShippedDate.ToString("dd/MM/yyyy"))</td>
             <td>@order.Freight</td>
             <td>
-                <a asp-action="Update" asp-controller="Order" asp-route-id="@order.OrderId">Edit</a>
+                <a asp-action="Index" asp-controller="OrderDetail" asp-route-id="@order.OrderId">Details</a>
                 <a asp-action="DeleteAsyn" asp-controller="Order" asp-route-id="@order.OrderId">Delete</a>
             </td>
         </tr>
